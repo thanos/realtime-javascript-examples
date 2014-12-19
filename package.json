@@ -1,0 +1,10 @@
+{
+"name": "live-quotes",
+"version": "0.0.1",
+"description": "simple test script with socket.io app",
+"dependencies": {
+"request": "^2.51.0",
+"socket.io": "^1.2.1"
+}
+}
+  

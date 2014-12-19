@@ -1,0 +1,99 @@
+
+<!doctype html>
+<html>
+	<head>
+	<title>Live Quotes!</title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+ 
+	<style>
+		.ticker {
+		font-weight: bold;
+		}
+		.positive {
+		color: green;
+		}
+		.negative {
+		color: red;
+		}
+		.neutral {
+		color: black;
+		}
+		.change {
+		font-style: italic;
+		}
+		.pchange {
+		font-weight: bold;
+		}
+		.ttime {
+		font-size: 75%;
+		}
+	</style>
+	</head>
+	<body>
+	<h3>Last updated: <span id="timestamp"></span>
+	 	<table class="table table-condensed table-striped">
+			<thead>
+				<tr></tr>
+			</thead>
+			<tbody>
+				<tr id="AAPL">
+					<td class='ticker'></td>
+					<td class='price'></td>
+					<td class='change'></td>
+					<td class='pchange'></td>
+					<td class='ttime'></td>
+				</tr>
+				<tr id="N">
+					<td class='ticker'></td>
+					<td class='price'></td>
+					<td class='change'></td>
+					<td class='pchange'></td>
+					<td class='ttime'></td>
+				</tr>
+				<tr id="GOOG">
+					<td class='ticker'></td>
+					<td class='price'></td>
+					<td class='change'></td>
+					<td class='pchange'></td>
+					<td class='ttime'></td>
+				</tr>
+				<tr id="MSFT">
+					<td class='ticker'></td>
+					<td class='price'></td>
+					<td class='change'></td>
+					<td class='pchange'></td>
+					<td class='ttime'></td>
+				</tr>
+			</tbody>
+		</table>
+		 
+		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+		<script>
+			var socket = io();
+			socket.on('quotes', function(data){
+				$("#timestamp").html(new Date(data.timestamp).toLocaleString())
+				data.quotes.forEach(function(quote) {
+					var row = $("#"+quote.t);
+					row.find(".ticker").html(quote.t);
+					row.find(".price").html(quote.l_cur);
+					row.find(".change").html(quote.c);
+					switch (quote.c[0]) {
+						case '+':
+							row.find(".change").removeClass("negative neutral").addClass("positive");
+							break;
+						case '-':
+							row.find(".change").removeClass("positive neutral").addClass("negative");
+							break;
+						default:
+							row.find(".change").removeClass("negative positive").addClass("neutral");
+					}
+					row.find(".pchange").html(quote.cp+'%')
+					row.find(".ttime").html(quote.lt);
+				});
+			});
+		</script>
+	</body>
+</html> 
