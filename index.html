@@ -74,6 +74,8 @@
 		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 		<script>
+
+		//add new method to jquery to rotate elenments by changing their css values.
 		jQuery.fn.rotate = function(degrees) {
     $(this).css({'-webkit-transform' : 'rotate('+ degrees +'deg)',
                  '-moz-transform' : 'rotate('+ degrees +'deg)',
@@ -82,18 +84,23 @@
     return $(this);
 };
 
-
+			// connect to the local websocket
 			var socket = io();
+			// on a ping message
 			socket.on('ping', function(data){
+				// rotate the icon using query custom plugin.
 				$("#spin").rotate( (data.spin*45)% 360);
 			});
 			socket.on('quotes', function(data){
+				// on a quote update stamp of element with id=timestamp.
 				$("#timestamp").html(new Date(data.timestamp).toLocaleString())
 				data.quotes.forEach(function(quote) {
-					var row = $("#"+quote.t);
+					var row = $("#"+quote.t); //get row with id = quote.ticker
+					// on a quote update stamp of elements with class=ticker.
 					row.find(".ticker").html(quote.t);
 					row.find(".price").html(quote.l_cur);
 					row.find(".change").html(quote.c);
+					//change class of element depending direction of change
 					switch (quote.c[0]) {
 						case '+':
 							row.find(".change").removeClass("negative neutral").addClass("positive");
