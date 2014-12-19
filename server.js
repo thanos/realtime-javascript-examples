@@ -4,6 +4,8 @@ var fs = require('fs');
 var request = require('request');
  
 app.listen(3000);
+
+var spin =0;
  
 function handler (req, res) {
 	fs.readFile(__dirname + '/index.html', function (err, data) {
@@ -22,8 +24,12 @@ io.on('connection', function(socket){
 	var timer = setInterval(function() {
 			collect(socket);
 		}, 35000);
+	var ping = setInterval(function() {
+			socket.emit('ping', { spin: spin++});
+		}, 3000);
 	socket.on('disconnect', function () {
 		clearInterval(timer);
+		clearInterval(ping);
 	});
 });
  

@@ -4,6 +4,7 @@
 	<head>
 	<title>Live Quotes!</title>
 	<!-- Latest compiled and minified CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
  
@@ -32,7 +33,8 @@
 	</style>
 	</head>
 	<body>
-	<h3>Last updated: <span id="timestamp"></span>
+	<h3>Last updated: <span><span id="timestamp"></span><i id="spin" class="fa fa-refresh"></i></span>
+
 	 	<table class="table table-condensed table-striped">
 			<thead>
 				<tr></tr>
@@ -72,7 +74,19 @@
 		<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
 		<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 		<script>
+		jQuery.fn.rotate = function(degrees) {
+    $(this).css({'-webkit-transform' : 'rotate('+ degrees +'deg)',
+                 '-moz-transform' : 'rotate('+ degrees +'deg)',
+                 '-ms-transform' : 'rotate('+ degrees +'deg)',
+                 'transform' : 'rotate('+ degrees +'deg)'});
+    return $(this);
+};
+
+
 			var socket = io();
+			socket.on('ping', function(data){
+				$("#spin").rotate( (data.spin*45)% 360);
+			});
 			socket.on('quotes', function(data){
 				$("#timestamp").html(new Date(data.timestamp).toLocaleString())
 				data.quotes.forEach(function(quote) {

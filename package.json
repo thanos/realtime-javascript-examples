@@ -1,5 +1,5 @@
 {
-"name": "live-quotes",
+"name": "realtime-javascript-examples",
 "version": "0.0.1",
 "description": "simple test script with socket.io app",
 "dependencies": {
